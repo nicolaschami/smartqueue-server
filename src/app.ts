@@ -14,7 +14,11 @@ export function buildApp() {
 
   
   app.register(cors, {
-    origin: "http://localhost:5173",
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://smartqueue-frontendv1.vercel.app',
+    ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   } );
