@@ -35,6 +35,9 @@ export const businesses = smartqueue.table('businesses', {
   address: varchar('address', { length: 255 }),
 
   country: varchar('country', { length: 2 }),
+  username: varchar('username', { length: 100 }).unique(),
+  email: varchar('email', { length: 255 }).unique(),
+  passwordHash: text('password_hash').notNull(),
 
   timezone: varchar('timezone', { length: 60 })
     .notNull()
