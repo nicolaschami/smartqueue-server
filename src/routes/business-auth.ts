@@ -64,7 +64,12 @@ export default async function  businessAuthRoutes(app: FastifyInstance) {
           error: 'Invalid username or password.',
         });
       }
-
+console.log('--- BCRYPT DIAGNOSTIC ---');
+console.log('DB Hash Value:', JSON.stringify(business.passwordHash));
+console.log('DB Hash Length:', business.passwordHash?.length);
+console.log('Input Password:', JSON.stringify(password));
+console.log('Input Length:', password?.length);
+console.log('------------------------');
       // Compare the plain password with the stored bcrypt hash.
       const passwordIsValid = await bcrypt.compare(
         password,
