@@ -3,6 +3,8 @@ import { desc, isNull,eq,sql } from 'drizzle-orm';
 import { db } from '../db';
 import { businesses } from '../db/schema';
 import { queues } from '../db/schema';
+import bcrypt from 'bcryptjs';
+
 interface businessBody {
   
   name: string;
@@ -12,6 +14,9 @@ interface businessBody {
 address?: string;
 country?: string;
 timezone?: string;
+username: string;
+  
+  password: string;
 
 }
 
@@ -57,6 +62,11 @@ app.post(
      if (!body.name?.trim() || !body.phone?.trim() || !body.slug?.trim()) {
   return reply.status(400).send({ error: 'Business name, phone number, and slug are required.' });
 }
+const passwordHash = await bcrypt.hash(
+  body.password,
+  12,
+);
+
 const payload = {
   name: body.name.trim(),
   slug: body.slug.trim(),
@@ -64,6 +74,9 @@ const payload = {
   address: body.address?.trim() ?? null,
   country: body.country?.trim() ?? null,
   timezone: body.timezone?.trim() || 'UTC',
+  email:"123@gmail.com",
+  username:"123@gmail.com",
+  passwordHash,
 };
 console.log('Inserting business:', payload); // <-- add this
 
