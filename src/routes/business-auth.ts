@@ -1,4 +1,4 @@
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 
@@ -10,8 +10,8 @@ type LoginBody = {
   password: string;
 };
 
-const businessAuthRoutes: FastifyPluginAsync = async (fastify) => {
-  fastify.post<{ Body: LoginBody }>(
+export default async function  businessAuthRoutes(app: FastifyInstance) {
+  app.post<{ Body: LoginBody }>(
     '/api/business/login',
     {
       schema: {
@@ -111,6 +111,4 @@ const businessAuthRoutes: FastifyPluginAsync = async (fastify) => {
       });
     },
   );
-};
-
-export default businessAuthRoutes;
+}

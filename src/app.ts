@@ -6,7 +6,7 @@ import  businessesRoutes  from './routes/businesses.js';
 import queuesRoutes from './routes/queues.js';
 import queuesentriesRoutes from './routes/queue_entries.js'
 import notificationRouts from './routes/notification.js'
-import authentications from './routes/business-auth.js'
+import businessAuthRoutes from './routes/business-auth.js'
 export function buildApp() {
   const app = Fastify({
     logger: true,
@@ -29,6 +29,7 @@ export function buildApp() {
   app.register(queuesRoutes, {prefix: '/api'});
   app.register(queuesentriesRoutes, {prefix: '/api'});
   app.register(notificationRouts, {prefix: '/api'});
+  app.register(businessAuthRoutes, {prefix: '/api'});
     webpush.setVapidDetails(
     'mailto:nicolaschamy@gmail.com',
     process.env.VAPID_PUBLIC_KEY!,
