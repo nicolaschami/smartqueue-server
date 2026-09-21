@@ -6,6 +6,7 @@ import  businessesRoutes  from './routes/businesses.js';
 import queuesRoutes from './routes/queues.js';
 import queuesentriesRoutes from './routes/queue_entries.js'
 import notificationRouts from './routes/notification.js'
+import authentications from './routes/business-auth.js'
 export function buildApp() {
   const app = Fastify({
     logger: true,
