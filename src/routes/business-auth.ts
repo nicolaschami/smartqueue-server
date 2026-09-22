@@ -102,6 +102,11 @@ export default async function businessAuthRoutes(app: FastifyInstance) {
           address: businesses.address,
           passwordHash: businesses.passwordHash,
           isActive: businesses.isActive,
+          slug : businesses.slug,
+          phone : businesses.phone,
+          country: businesses.country,
+          timezone: businesses.timezone,
+          email: businesses.email
         })
         .from(businesses)
         .where(eq(businesses.username, username))
@@ -141,9 +146,6 @@ console.log('Newly Generated Hash:', generatedHash);
 // Test comparison directly in console:
 const testResult = await bcrypt.compare('LP112233.lp', generatedHash);
 console.log('Direct Comparison Check:', testResult); // Outputs: true
-      
-
-
 console.log('==============***************===============================Level2');
 
       const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
@@ -161,11 +163,17 @@ console.log('==============***************===============================Level2'
           businessId: businesses.id,
           businessName: businesses.name,
           businessAddress: businesses.address,
+          businessSlug:businesses.slug,
+          businessphone : businesses.phone,
+          businesscountry: businesses.country,
+          businesstimezone: businesses.timezone,
+          businessemail: businesses.email,
 
           queueId: queues.id,
           queueName: queues.name,
           queueStatus: queues.status,
           nextNumber: queues.nextNumber,
+          averageservicem : queues.avgServiceMinutes
         })
         .from(businesses)
         .innerJoin(
