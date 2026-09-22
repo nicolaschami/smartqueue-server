@@ -187,12 +187,19 @@ console.log('==============***************===============================Level2'
           id: business.id,
           name: business.name,
           address: business.address,
+          Slug:business.slug,
+          phone : business.phone,
+          country: business.country,
+          timezone: business.timezone,
+          email: business.email,
+
         },
         queues: queueRows.map((row) => ({
           id: row.queueId,
           name: row.queueName,
           status: row.queueStatus,
           nextNumber: row.nextNumber,
+          averageservicem : row.averageservicem
         })),
       });
     },
