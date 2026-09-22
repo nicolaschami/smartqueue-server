@@ -123,6 +123,18 @@ export default async function businessAuthRoutes(app: FastifyInstance) {
       console.log('Postman Password:', password);
       console.log('==============***************===============================');
 
+      console.log('==============***************===============================');
+
+const hardcodedCheck = await bcrypt.compare('LP112233.lp', business.passwordHash);
+console.log('Hardcoded test result:', hardcodedCheck); // WILL RETURN TRUE
+
+const realCheck = await bcrypt.compare(password, business.passwordHash);
+console.log('Incoming body test result:', realCheck); // RETURNING FALSE
+      console.log('==============***************===============================');
+
+
+
+      
       const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
       console.log('Compare Result:', passwordIsValid);
 
