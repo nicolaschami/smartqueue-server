@@ -12,7 +12,7 @@ type LoginBody = {
 
 export default async function  businessAuthRoutes(app: FastifyInstance) {
   app.post<{ Body: LoginBody }>(
-    '/api/business/login',
+    '/business/login',
     {
       schema: {
         body: {
@@ -69,7 +69,7 @@ console.log('Username matched:', business?.name);
 console.log('isActive value:', business?.isActive);
 console.log('Stored DB Hash:', business?.passwordHash);
 console.log('Postman Password:', password);
-
+console.log('=============================================');
 const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
 console.log('Compare Result:', passwordIsValid);
 
