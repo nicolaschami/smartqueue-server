@@ -132,9 +132,20 @@ const realCheck = await bcrypt.compare(password, business.passwordHash);
 console.log('Incoming body test result:', realCheck); // RETURNING FALSE
       console.log('==============***************===============================');
 
+      console.log('==============***************===============================Level2');
 
+// Correct usage in an async function:
+const generatedHash = await bcrypt.hash('LP112233.lp', 10);
+console.log('Newly Generated Hash:', generatedHash);
 
+// Test comparison directly in console:
+const testResult = await bcrypt.compare('LP112233.lp', generatedHash);
+console.log('Direct Comparison Check:', testResult); // Outputs: true
       
+
+
+console.log('==============***************===============================Level2');
+
       const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
       console.log('Compare Result:', passwordIsValid);
 
