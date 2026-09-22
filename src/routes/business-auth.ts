@@ -10,7 +10,58 @@ type LoginBody = {
   password: string;
 };
 
-export default async function  businessAuthRoutes(app: FastifyInstance) {
+type ResetPasswordBody = {
+  username: string;
+  newPassword: string;
+};
+
+export default async function businessAuthRoutes(app: FastifyInstance) {
+  // ------------------------------------------------------------------
+  // TEMPORARY: Route to fix/update invalid password hashes in the DB
+  // ------------------------------------------------------------------
+  app.post<{ Body: ResetPasswordBody }>(
+    '/business/reset-password',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['username', 'newPassword'],
+          properties: {
+            username: { type: 'string', minLength: 1 },
+            newPassword: { type: 'string', minLength: 1 },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    async (request, reply) => {
+      const username = request.body.username.trim();
+      const newPassword = request.body.newPassword;
+
+      // Generate a fresh, valid bcrypt hash
+      const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
+      // Update the hash in Drizzle ORM
+      const updatedRows = await db
+        .update(businesses)
+        .set({ passwordHash: newPasswordHash })
+        .where(eq(businesses.username, username))
+        .returning({ id: businesses.id, name: businesses.name });
+
+      if (updatedRows.length === 0) {
+        return reply.code(404).send({ error: 'Business username not found.' });
+      }
+
+      return reply.code(200).send({
+        message: 'Password successfully re-hashed and updated in the database.',
+        business: updatedRows[0],
+      });
+    }
+  );
+
+  // ------------------------------------------------------------------
+  // LOGIN ROUTE
+  // ------------------------------------------------------------------
   app.post<{ Body: LoginBody }>(
     '/business/login',
     {
@@ -64,14 +115,16 @@ export default async function  businessAuthRoutes(app: FastifyInstance) {
           error: 'Invalid username or password.',
         });
       }
-console.log('--- DEBUG INFO ---');
-console.log('Username matched:', business?.name);
-console.log('isActive value:', business?.isActive);
-console.log('Stored DB Hash:', business?.passwordHash);
-console.log('Postman Password:', password);
-console.log('=============================================');
-const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
-console.log('Compare Result:', passwordIsValid);
+
+      console.log('--- DEBUG INFO ---');
+      console.log('Username matched:', business.name);
+      console.log('isActive value:', business.isActive);
+      console.log('Stored DB Hash:', business.passwordHash);
+      console.log('Postman Password:', password);
+      console.log('=============================================');
+
+      const passwordIsValid = await bcrypt.compare(password, business.passwordHash);
+      console.log('Compare Result:', passwordIsValid);
 
       if (!passwordIsValid) {
         return reply.code(401).send({
